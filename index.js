@@ -24,7 +24,7 @@ Timers.prototype.start = function (name, timeout, callback) {
 Timers.prototype.startOrExtend = function (name, timeout, callback) {
   this.stop(name, function () {
     this.start(name, timeout, callback)
-  })
+  }.bind(this))
 }
 
 Timers.prototype.stop = function (name, callback) {
