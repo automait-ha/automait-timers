@@ -15,19 +15,22 @@ function Timers(automait) {
 Timers.prototype = Object.create(Emitter.prototype)
 
 Timers.prototype.start = function (name, timeout, callback) {
-  setTimeout(function () {
+  this.timers[name] = setTimeout(function () {
     this.emit(name)
     callback()
   }.bind(this), timeout * 1000)
 }
 
 Timers.prototype.startOrExtend = function (name, timeout, callback) {
+  this.stop(name, function () {
+    this.start(name, timeout, callback)
+  })
+}
+
+Timers.prototype.stop = function (name, callback) {
   var timer = this.timers[name]
   if (timer) {
     clearTimeout(timer)
   }
-  this.timers[name] = setTimeout(function () {
-    this.emit(name)
-    callback()
-  }.bind(this), timeout * 1000)
+  callback()
 }
